@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- html 태그에 - xmlns:th="http://www.thymeleaf.org" - 를 붙이면 thymeleaf 템플릿을 적용하게 된다. -->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-This is places Page.
+<p>
+    This is places Page.
+</p>
+
+<ul>
+    <li>placeType: <span th:text="${placeType} ?: _">?</span></li>
+    <li>placeName: <span th:text="${placeName} ?: _">?</span></li>
+    <li>address: <span th:text="${address} ?: _">?</span></li>
+</ul>
+
 </body>
 </html>
