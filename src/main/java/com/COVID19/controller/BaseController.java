@@ -1,13 +1,17 @@
 package com.COVID19.controller;
 
-import org.springframework.boot.web.servlet.error.ErrorController;
+import com.COVID19.domain.Admin;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 /* Controller layer 로 Bean 에 등록 */
+@ControllerAdvice(basePackageClasses = Admin.class)
 @Controller
-public class BaseController implements ErrorController {
+public class BaseController {
 
     /*
      * 1. Jsp 경로 설정 방법
@@ -25,8 +29,9 @@ public class BaseController implements ErrorController {
      */
 
     @GetMapping("/")
-    public String root() {
-        return "index";
+    public String root() throws Exception {
+        throw new Exception("테스트");
+        //return "index";
     }
 
     /*
@@ -37,8 +42,10 @@ public class BaseController implements ErrorController {
      * 1) application.properties 에서 'server.error.whitelabel.enabled=false' 을 설정하여 에러 경로를 만든다.
      * 2) Error 커스텀 페이지가 페이지가 있는 Controller 에서 'ErrorController'를 구현한다.
      */
+
     @RequestMapping("/error")
     public String error() {
         return "error";
     }
+
 }
