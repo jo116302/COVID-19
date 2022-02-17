@@ -34,18 +34,4 @@ public class BaseController {
         //return "index";
     }
 
-    /*
-     * Error Custom Page 설정
-     * 오류가 발생하면 커스텀 매핑이 필요하며, 설정이 필요하다.
-     *
-     * 절차는 다음과 같다.
-     * 1) application.properties 에서 'server.error.whitelabel.enabled=false' 을 설정하여 에러 경로를 만든다.
-     * 2) Error 커스텀 페이지가 페이지가 있는 Controller 에서 'ErrorController'를 구현한다.
-     */
-
-    @RequestMapping("/error")
-    public String error() {
-        return "error";
-    }
-
 }

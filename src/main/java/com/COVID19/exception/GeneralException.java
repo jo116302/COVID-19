@@ -1,7 +1,9 @@
 package com.COVID19.exception;
 
 import com.COVID19.constant.ErrorCode;
+import lombok.Getter;
 
+@Getter
 public class GeneralException extends RuntimeException {
 
     /*
