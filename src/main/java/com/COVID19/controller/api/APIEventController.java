@@ -5,6 +5,7 @@ import com.COVID19.dto.APIErrorResponse;
 import com.COVID19.exception.GeneralException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,19 +16,26 @@ public class APIEventController {
 
     @GetMapping("/events")
     public List<String> getEvents() {
-        throw new GeneralException("테스트 메시지");
-        // return List.of("event1", "event2");
+        // 예외처리를 하기위한 테스트 케이스
+        // throw new HttpRequestMethodNotSupportedException("405 Error Test");
+
+        return List.of("event1", "event2");
     }
 
     //@PostMapping("/place/{placeId}/events")
     @PostMapping("/events")
     public Boolean createEvent() {
-        throw new RuntimeException("Runtime 테스트 메시지");
-        //return true;
+        // 예외처리를 하기위한 테스트 케이스
+        // throw new GeneralException("장군님");
+
+        return true;
     }
 
     @GetMapping("/events/{eventId}")
     public String getEvent(@PathVariable Integer eventId) {
+        // 예외처리를 하기위한 테스트 케이스
+        // throw new RuntimeException("런타임 에러");
+
         return "eventId : "+eventId;
     }
 
