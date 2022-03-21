@@ -2,7 +2,9 @@ package com.COVID19.controller.api;
 
 import com.COVID19.constant.ErrorCode;
 import com.COVID19.constant.EventStatus;
+import com.COVID19.dto.EventDTO;
 import com.COVID19.dto.EventResponse;
+import com.COVID19.service.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +16,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -25,6 +30,12 @@ public class APIEventControllerTest {
 
     private final MockMvc mvc;
     private final ObjectMapper mapper;
+
+    /*
+     * @MockBean을 사용하지 않을 경우 실제 Controller에 존재하는 실제 Bean을 주입하도록 하면(Controller와 Service단을 실행) 통합테스트라고 봐야한다.
+     * 단위테스트를 수행하고 싶은 경우 @MockBean을 사용하여 서비스단의 처리 과정은 제외한 입력과 출력의 형태로만 확인할 수 있다.
+     */
+    @MockBean private EventService eventService;
 
     public APIEventControllerTest (
             @Autowired MockMvc mvc,
@@ -37,10 +48,22 @@ public class APIEventControllerTest {
     @DisplayName("[API] [GET] 이벤트 리스트 조회 + 검색 파라미터")
     @Test
     void givenParameters_whenRequestingEvents_thenReturnsListOfEventsInStandardResponse() throws Exception {
+
         // Given
+        // S:Mocking 사용한 테스트 구간
+        // 기존 Mockito의 When과 동일한 기능
+        given(eventService.getEvents(any(), any(), any(), any(), any())).willReturn(List.of(createEventDTO()));
+        // E:Mocking 사용한 테스트 구간
 
         // When & Then
-        mvc.perform(get("/api/events"))
+        mvc.perform(
+                get("/api/events")
+                        .queryParam("placeId", "1")
+                        .queryParam("eventName", "운동")
+                        .queryParam("eventStatus", EventStatus.OPENED.name())
+                        .queryParam("eventStartDatetime", "2022-01-01T00:00:00")
+                        .queryParam("eventEndDatetime", "2022-01-01T00:00:00")
+                )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data").isArray())
@@ -63,6 +86,12 @@ public class APIEventControllerTest {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+
+        // S:Mocking 사용한 테스트 구간
+        // verify() 목키토로 한번 호출진 요청을 확인하는 용도로 사용된다 (then()과 verify()는 동일한 기능 수행)
+        then(eventService).should().getEvents(any(), any(), any(), any(), any());
+        //verify(eventRepository).findEvents(null,null,null,null,null);
+        // E:Mocking 사용한 테스트 구간
     }
 
     @DisplayName("[API] [GET] 이벤트 리스트 조회 - 잘못된 검색 파라미터")
@@ -184,5 +213,28 @@ public class APIEventControllerTest {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+    }
+
+    /*
+     * 테스트 더미를 만드는 메소드 - 테스트에 필요한 메서드만 지정 가능
+     */
+
+    private EventDTO createEventDTO() {
+        return EventDTO.of(
+                1L,
+                "오후 운동",
+                EventStatus.OPENED,
+                LocalDateTime.of(
+                        2022, 1, 1, 13, 15, 0
+                ),
+                LocalDateTime.of(
+                        2022, 1, 1, 13, 15, 0
+                ),
+                30,
+                50,
+                "마스크 꼭 착용하세요",
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
     }
 }
