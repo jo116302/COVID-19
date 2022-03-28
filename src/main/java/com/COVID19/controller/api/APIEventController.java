@@ -8,11 +8,16 @@ import com.COVID19.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -23,8 +28,8 @@ public class APIEventController {
     @GetMapping("/events")
     public APIDataResponse<List<EventResponse>> getEvents(
             // S:APIEventControllerTest에서 Mock으로 테스트 작성하면서 사용되는 파라미터
-            Long placeId,
-            String eventName,
+            @Positive Long placeId,
+            @Size(min = 2) String eventName,
             EventStatus eventStatus,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDatetime,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDatetime
@@ -84,7 +89,7 @@ public class APIEventController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/events")
     public APIDataResponse<Void> createEvent(
-            @RequestBody EventRequest eventRequest
+            @Valid @RequestBody EventRequest eventRequest
             ) {
         // 예외처리를 하기위한 테스트 케이스
         // throw new GeneralException("장군님");
