@@ -1,9 +1,11 @@
 package com.COVID19.service;
 
+import com.COVID19.constant.ErrorCode;
 import com.COVID19.constant.EventStatus;
 import com.COVID19.domain.Event;
 import com.COVID19.dto.EventDTO;
 
+import com.COVID19.exception.GeneralException;
 import com.COVID19.repository.EventRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -136,6 +140,32 @@ class EventServiceTest {
         then(eventRepository).should().findEvents(placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime);
         //verify(eventRepository).findEvents(1L, "오후 운동", eventStatus, eventStartDatetime, eventEndDatetime);
         // E:@ExtendWith(MockitoExtension.class) 사용한 테스트 구간
+    }
+
+    @DisplayName("이벤트를 검색하는데 에러가 발생하는 경우, 줄서기 프로젝트 기본 에러로 진행하여 에러 던진다.")
+    @Test
+    void givenDataRelatedException_whenSearchingEvents_thenThrowsGeneralException() {
+
+        // Given
+        RuntimeException e = new RuntimeException("This is test.");
+        given(eventRepository.findEvents(
+                any(), any(), any(), any(), any()
+        )).willThrow(e);
+
+        // When
+        /*
+         * 예외를 잡아주는 테스트 Junit, AssertJ 모두 지원
+         *   - Assert에서는 catchThrowable을 사용한다.
+         */
+        Throwable thrown = catchThrowable(() -> {
+            sut.getEvents(null, null, null, null, null);
+        });
+
+        // Then
+        assertThat(thrown)
+                .isInstanceOf(GeneralException.class)
+                .hasMessageContaining(ErrorCode.DATA_ACCESS_ERROR.getMessage());
+        then(eventRepository).should().findEvents(any(), any(), any(), any(), any());
     }
 
     @DisplayName("이벤트 ID로 존재하는 이벤트를 조회하면, 해당 이벤트 정보를 출력하여 보여준다.")

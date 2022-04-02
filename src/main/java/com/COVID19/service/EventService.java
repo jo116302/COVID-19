@@ -1,7 +1,9 @@
 package com.COVID19.service;
 
+import com.COVID19.constant.ErrorCode;
 import com.COVID19.constant.EventStatus;
 import com.COVID19.dto.EventDTO;
+import com.COVID19.exception.GeneralException;
 import com.COVID19.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,9 +34,15 @@ public class EventService {
             LocalDateTime eventStartDatetime,
             LocalDateTime eventEndDatetime
     ) {
-        return eventRepository.findEvents(
-            placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime
-        );
+        try{
+            return eventRepository.findEvents( placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime);
+        } catch (Exception e) {
+            /*
+             * 에러가 발생했을 때 커스텀 되어진 에러형태로 출력 가능하도록 코드 작성
+             *   - EventServiceTest.java 의 givenDataRelatedException_whenSearchingEvents_thenThrowsGeneralException() 메소드와 연동
+             */
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
     public Optional<EventDTO> getEvent(Long eventId) {

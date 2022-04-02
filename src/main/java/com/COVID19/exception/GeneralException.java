@@ -36,6 +36,9 @@ public class GeneralException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
+    /*
+     * 특정 에러를 커스텀 되어졌을 경우 호출되며, 커스텀된 적합한 에러로 연결하는 매개체 메소드이다.
+     */
     public GeneralException(ErrorCode errorCode, Throwable cause) {
         super(errorCode.getMessage(), cause);
         this.errorCode = errorCode;
