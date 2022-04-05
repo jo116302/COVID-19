@@ -17,10 +17,10 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Validated
-@RestController
+//@Validated
+//@RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+//@RequestMapping("/api")
 public class APIEventController {
 
     private final EventService eventService;
@@ -38,7 +38,7 @@ public class APIEventController {
         // 예외처리를 하기위한 테스트 케이스
         // throw new HttpRequestMethodNotSupportedException("405 Error Test");
 
-        /*
+
         List<EventResponse> eventResponses = eventService.getEvents(
                 placeId,
                 eventName,
@@ -48,7 +48,7 @@ public class APIEventController {
         ).stream().map(EventResponse::from).toList();
 
         return APIDataResponse.of(eventResponses);
-        */
+
 
 
         // S:입출력 테스트 (APIEventController.java Test) - APIEventControllerTest에서 Mock으로 테스트 작성하면서 필요 없어진 코드
@@ -77,11 +77,13 @@ public class APIEventController {
          * EventResponse는 파라미터 값이 어떻든 원하는 결과 값과 데이터 형태를 제공하는 것이 적합하기 때문이다.
          * EventResponse record의 from 메서드로 작성됐다.
          */
+        /*
         List<EventResponse> response = eventService.getEvents(
                 placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime
         ).stream().map(EventResponse::from).toList();
 
         return APIDataResponse.of(response);
+        */
         // E:APIEventControllerTest에서 Mock으로 테스트 작성하면서 사용되는 코드
     }
 

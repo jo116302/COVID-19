@@ -6,7 +6,7 @@ import com.COVID19.dto.EventDTO;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface EventServiceInter {
+public interface TEventServiceInter {
 
     /**
      * 

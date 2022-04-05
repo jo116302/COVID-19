@@ -26,8 +26,8 @@ public enum ErrorCode {
     private final String message;
 
     // 기본으로 예외 메시지 전달
-    public String getMessage(Exception e) {
-        return getMessage(this.getMessage() + " - " + e.getMessage());
+    public String getMessage(Throwable e) {
+        return this.getMessage(this.getMessage() + " - " + e.getMessage());
     }
 
     // 사용자가 직접 메시지 입력한 경우

@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * ErrorCode.java 를 테스트하는 테스트 클래스이다.
  */
 
+@DisplayName("에러 처리 - 에러 코드")
 class ErrorCodeTest {
 
     /*
@@ -27,6 +28,7 @@ class ErrorCodeTest {
      *   - 동일한 검사에서 다양한 입력값에 따른 결과값이 적합하게 도출되는지 확인하기 위한 방법으로 사용된다.
      *   - 테스트 메소드 명과 동일한 메소드를 오버로딩형식으로 static 형태로 작성하게 된다.
      *   - @MethodSource() 에서 파라미터 값으로 문자열을 주게 되면 오버로딩이 아닌 입력된 메소드명으로 작성된 메소드를 설정할 수 있다.
+     *   - Return Type이 Stream 객체로 작성되야 한다.
      */
     @ParameterizedTest(name = "[{index}] \"{0}\" -----> \"{1}\"")
     @MethodSource
@@ -61,7 +63,7 @@ class ErrorCodeTest {
     @ParameterizedTest(name = "[{index}] \"{0}\" -----> \"{1}\"")
     @MethodSource
     @DisplayName("에러 메시지를 받으면, 해당 에러 메시지로 출력")
-        // @Test
+    // @Test
     void givenMessage_whenGettingMessage_thenReturnsMessage(String input, String expected) {
         // Given
 

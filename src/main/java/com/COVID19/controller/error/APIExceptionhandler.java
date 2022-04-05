@@ -59,9 +59,9 @@ public class APIExceptionhandler extends ResponseEntityExceptionHandler {
      *   - 일반적으로 테스트 수행시 Controller Test 작성할 때 함께 테스트 작성하게 된다.
      *   - 입출력을 제대로 확인해보고 싶은 경우 직접 호출해서 입력 출력을 확인하게 된다. (APIExceptionhandlerTest.java)
      */
-    @ExceptionHandler
+    //@ExceptionHandler
     // public ResponseEntity<APIErrorResponse> general(GeneralException e) {
-    public ResponseEntity<Object> general(ConstraintViolationException e, WebRequest request) {
+    //public ResponseEntity<Object> general(ConstraintViolationException e, WebRequest request) {
 
         // S:Return 값의 반복(보일러코드)으로 인한 리팩토링 전 코드
         /*
@@ -78,8 +78,8 @@ public class APIExceptionhandler extends ResponseEntityExceptionHandler {
         */
         // E:Return 값의 반복(보일러코드)으로 인한 리팩토링 전 코드
 
-        return getInternalResponseEntity(e, ErrorCode.VALIDATION_ERROR, HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request);
-    }
+    //    return getInternalResponseEntity(e, ErrorCode.VALIDATION_ERROR, HttpHeaders.EMPTY, HttpStatus.BAD_REQUEST, request);
+    //}
 
     @ExceptionHandler
     // public ResponseEntity<APIErrorResponse> general(GeneralException e) {

@@ -6,6 +6,11 @@ import com.COVID19.dto.EventDTO;
 import com.COVID19.exception.GeneralException;
 import com.COVID19.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScans;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,7 +40,13 @@ public class EventService {
             LocalDateTime eventEndDatetime
     ) {
         try{
-            return eventRepository.findEvents( placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime);
+            return eventRepository.findEvents(
+                    placeId,
+                    eventName,
+                    eventStatus,
+                    eventStartDatetime,
+                    eventEndDatetime
+            );
         } catch (Exception e) {
             /*
              * 에러가 발생했을 때 커스텀 되어진 에러형태로 출력 가능하도록 코드 작성

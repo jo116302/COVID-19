@@ -12,8 +12,8 @@ import java.util.List;
  * Controller + ResponseBody
  * - ResponseBody : Http Body에 Controller 데이터 값을 담을 수 있도록 지원해주는 기능을 수행
  */
-@RestController
-@RequestMapping("/api")
+//@RestController
+//@RequestMapping("/api")
 public class APIAuthController {
 
     @PostMapping("/sign-up")
