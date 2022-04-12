@@ -39,4 +39,20 @@ public record EventRequest(
                 memo
         );
     }
+
+    public EventDTO toDTO() {
+        return EventDTO.of(
+                null,
+                this.placeId(),
+                this.eventName(),
+                this.eventStatus(),
+                this.eventStartDatetime(),
+                this.eventEndDatetime(),
+                this.currentNumberOfPeople(),
+                this.capacity(),
+                this.memo(),
+                null,
+                null
+        );
+    }
 }

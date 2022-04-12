@@ -19,6 +19,7 @@ import java.util.List;
 
 //@Validated
 //@RestController
+@Deprecated
 @RequiredArgsConstructor
 //@RequestMapping("/api")
 public class APIEventController {
@@ -38,7 +39,8 @@ public class APIEventController {
         // 예외처리를 하기위한 테스트 케이스
         // throw new HttpRequestMethodNotSupportedException("405 Error Test");
 
-
+        // JPA Service 되기 이전 소스코드
+        /*
         List<EventResponse> eventResponses = eventService.getEvents(
                 placeId,
                 eventName,
@@ -48,7 +50,19 @@ public class APIEventController {
         ).stream().map(EventResponse::from).toList();
 
         return APIDataResponse.of(eventResponses);
+        */
 
+        // S:JPA Service 사용되면서 작성된 소스코드
+        List<EventResponse> eventResponses = eventService.getEvents(
+                placeId,
+                eventName,
+                eventStatus,
+                eventStartDatetime,
+                eventEndDatetime
+        ).stream().map(EventResponse::from).toList();
+
+        return APIDataResponse.of(eventResponses);
+        // E:JPA Service 사용되면서 작성된 소스코드
 
 
         // S:입출력 테스트 (APIEventController.java Test) - APIEventControllerTest에서 Mock으로 테스트 작성하면서 필요 없어진 코드
@@ -90,13 +104,22 @@ public class APIEventController {
     //@PostMapping("/place/{placeId}/events")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/events")
-    public APIDataResponse<Void> createEvent(
+    public APIDataResponse<String> createEvent(
             @Valid @RequestBody EventRequest eventRequest
             ) {
         // 예외처리를 하기위한 테스트 케이스
         // throw new GeneralException("장군님");
 
+        // JPA Service 되기 이전 소스코드
+        /*
         return APIDataResponse.empty();
+        */
+
+        // S:JPA Service 사용되면서 작성된 소스코드
+        boolean result = eventService.createEvent(eventRequest.toDTO());
+
+        return APIDataResponse.of(Boolean.toString(result));
+        // E:JPA Service 사용되면서 작성된 소스코드
     }
 
     @GetMapping("/events/{eventId}")
@@ -105,9 +128,12 @@ public class APIEventController {
         // throw new RuntimeException("런타임 에러");
         // return "eventId : "+eventId;
 
+        // JPA Service 되기 이전 소스코드
+        /*
         if (eventId.equals(2L)) {
             return APIDataResponse.empty();
         }
+
 
         // 입출력 테스트 (APIEventController.java Test)
         return APIDataResponse.of(EventResponse.of(
@@ -120,19 +146,44 @@ public class APIEventController {
                         50,
                         "마스크 꼭 착용하세요"
                 ));
+        */
+
+        // S:JPA Service 사용되면서 작성된 소스코드
+        EventResponse eventResponse = EventResponse.from(eventService.getEvent(eventId).orElse(null));
+
+        return APIDataResponse.of(eventResponse);
+        // E:JPA Service 사용되면서 작성된 소스코드
     }
 
     @PutMapping("/events/{eventId}")
-    public APIDataResponse<Void> modifyEvent(
-            @PathVariable Integer eventId,
+    public APIDataResponse<String> modifyEvent(
+            @PathVariable Long eventId,
             @RequestBody EventRequest eventRequest
             ) {
+
+        // JPA Service 되기 이전 소스코드
+        /*
         return APIDataResponse.empty();
+        */
+
+        // S:JPA Service 사용되면서 작성된 소스코드
+        boolean result = eventService.modifyEvent(eventId, eventRequest.toDTO());
+        return APIDataResponse.of(Boolean.toString(result));
+        // E:JPA Service 사용되면서 작성된 소스코드
     }
 
     @DeleteMapping("/events/{eventId}")
-    public APIDataResponse<Void> removeEvent(@PathVariable Integer eventId) {
+    public APIDataResponse<String> removeEvent(@PathVariable Long eventId) {
+        // JPA Service 되기 이전 소스코드
+        /*
         return APIDataResponse.empty();
+        */
+
+        // S:JPA Service 사용되면서 작성된 소스코드
+        boolean result = eventService.removeEvent(eventId);
+
+        return APIDataResponse.of(Boolean.toString(result));
+        // E:JPA Service 사용되면서 작성된 소스코드
     }
 
     /* // general 메소드 예외처리를 BaseExceptionHandler.java 로 이동
